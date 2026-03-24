@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 215 28% 8%;  /* #0B0F14 */
+    --foreground: 213 27% 84%;
+    --card: 215 28% 10%;
+    --card-foreground: 213 27% 84%;
+    --popover: 215 28% 10%;
+    --popover-foreground: 213 27% 84%;
+    --primary: 221 83% 53%;     /* #3B82F6 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 28% 16%;
+    --secondary-foreground: 213 27% 84%;
+    --muted: 215 28% 14%;
+    --muted-foreground: 213 27% 65%;
+    --accent: 215 28% 16%;
+    --accent-foreground: 213 27% 84%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 215 28% 18%;
+    --input: 215 28% 18%;
+    --ring: 221 83% 53%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-closyr-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
+  }
+}
+
+@layer components {
+  .glassmorphic {
+    @apply backdrop-blur-md bg-white/5 border border-white/10;
+  }
+  
+  .glassmorphic-dark {
+    @apply backdrop-blur-lg bg-black/20 border border-white/5;
+  }
+  
+  .smooth-transition {
+    @apply transition-all duration-200 ease-in-out;
+  }
+  
+  .soft-shadow {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .soft-shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+}
