@@ -126,7 +126,8 @@ function formatDate(dateString: string | null) {
   return new Date(dateString).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
-    time: '12:00'
+    hour: 'numeric',
+    minute: '2-digit'
   });
 }
 
