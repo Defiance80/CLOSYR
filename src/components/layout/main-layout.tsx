@@ -75,7 +75,8 @@ export function MainLayout({ children }: MainLayoutProps) {
         <div className="flex-1 flex flex-col min-w-0">
           <TopBar
             onMenuToggle={toggleSidebar}
-            sidebarCollapsed={isMobile ? mobileMenuOpen : sidebarCollapsed}
+            sidebarCollapsed={sidebarCollapsed}
+            mobileMenuOpen={mobileMenuOpen}
             isMobile={isMobile}
           />
           

@@ -29,34 +29,46 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-closyr-background flex items-center justify-center p-4">
+    <div className="min-h-screen bg-closyr-background flex items-center justify-center px-4 py-8">
       <div className="absolute inset-0 bg-gradient-to-br from-closyr-blue/5 via-transparent to-closyr-gold/5" />
       
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="relative z-10 w-full max-w-md"
+        className="relative z-10 w-full max-w-sm sm:max-w-md"
       >
-        <div className="text-center mb-8">
+        {/* Logo & Branding - Centered */}
+        <div className="flex flex-col items-center text-center mb-8">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="mb-6"
+            className="mb-4"
           >
-            <Logo size="xl" className="mx-auto" />
+            <Logo size="xl" variant="icon" />
           </motion.div>
           
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="mb-2"
+          >
+            <span className="font-bold text-3xl bg-gradient-to-r from-closyr-blue to-closyr-gold bg-clip-text text-transparent">
+              CLOSYR™
+            </span>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-closyr-blue to-white bg-clip-text text-transparent">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-2 bg-gradient-to-r from-closyr-blue to-white bg-clip-text text-transparent">
               Welcome to CLOSYR™
             </h1>
-            <p className="text-muted-foreground text-lg">
+            <p className="text-muted-foreground text-base sm:text-lg">
               Where deals don&apos;t just close — they converge.
             </p>
           </motion.div>
@@ -68,7 +80,7 @@ export default function LoginPage() {
           transition={{ delay: 0.6 }}
         >
           <Card className="glassmorphic-dark soft-shadow-lg">
-            <CardHeader>
+            <CardHeader className="pb-4">
               <CardTitle className="text-xl text-center">Sign In</CardTitle>
               <CardDescription className="text-center">
                 Demo Environment - Use the credentials below
@@ -85,7 +97,7 @@ export default function LoginPage() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full h-10 pl-10 pr-3 bg-background/50 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-closyr-blue smooth-transition"
+                      className="w-full h-11 pl-10 pr-3 bg-background/50 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-closyr-blue smooth-transition text-sm"
                       placeholder="demo@closyr.ai"
                       required
                     />
@@ -100,7 +112,7 @@ export default function LoginPage() {
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full h-10 pl-10 pr-10 bg-background/50 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-closyr-blue smooth-transition"
+                      className="w-full h-11 pl-10 pr-10 bg-background/50 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-closyr-blue smooth-transition text-sm"
                       placeholder="closyrdemo123"
                       required
                     />
@@ -122,7 +134,7 @@ export default function LoginPage() {
 
                 <Button 
                   type="submit" 
-                  className="w-full" 
+                  className="w-full h-11" 
                   disabled={isLoading}
                   variant="default"
                 >
