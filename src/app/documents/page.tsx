@@ -334,7 +334,7 @@ export default function DocumentsPage() {
           <CardContent>
             <div className="space-y-3">
               {filteredDocuments.map((doc) => {
-                const statusInfo = statusConfig[doc.status] || statusConfig.pending_review;
+                const statusInfo = statusConfig[doc.status as keyof typeof statusConfig] || statusConfig.pending_review;
                 const StatusIcon = statusInfo.icon;
                 
                 return (
