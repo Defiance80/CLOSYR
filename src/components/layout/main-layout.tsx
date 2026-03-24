@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sidebar } from './sidebar';
 import { TopBar } from './topbar';
+import { AIChatbot } from '@/components/chat/ai-chatbot';
 import { cn } from '@/lib/utils';
 
 interface MainLayoutProps {
@@ -93,6 +94,9 @@ export function MainLayout({ children }: MainLayoutProps) {
           </main>
         </div>
       </div>
+      
+      {/* AI Chatbot - Available on all pages */}
+      <AIChatbot />
     </div>
   );
 }

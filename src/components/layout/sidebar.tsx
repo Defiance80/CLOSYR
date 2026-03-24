@@ -16,19 +16,24 @@ import {
   Settings,
   LayoutDashboard,
   ArrowLeftRight,
-  Shield
+  Shield,
+  FileCheck,
+  Calculator,
+  Receipt
 } from 'lucide-react';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Transactions', href: '/transactions', icon: ArrowLeftRight },
   { name: 'Documents', href: '/documents', icon: FileText },
+  { name: 'Templates', href: '/templates', icon: FileCheck },
   { name: 'Communications', href: '/communications', icon: MessageSquare },
-  { name: 'Funds', href: '/funds', icon: DollarSign },
+  { name: 'Accounting', href: '/funds', icon: Calculator },
+  { name: '1099-S Filing', href: '/tax', icon: Receipt },
   { name: 'Automation', href: '/automation', icon: Zap },
-  { name: 'Analytics', href: '/analytics', icon: PieChart },
-  { name: 'Client Portal', href: '/portal', icon: Users },
+  { name: 'Reports', href: '/analytics', icon: PieChart },
   { name: 'Integrations', href: '/integrations', icon: BarChart3 },
+  { name: 'Client Portal', href: '/portal', icon: Users },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 

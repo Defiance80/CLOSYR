@@ -9,7 +9,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "CLOSYR™ - Deal Intelligence & Escrow Operating System",
-  description: "Where deals don't just close — they converge. Modern escrow and deal intelligence platform.",
+  description: "Smarter closings. Safer titles. Seamless escrow. Modern escrow and deal intelligence platform.",
   keywords: "escrow, real estate, deal intelligence, transaction management, fintech",
   authors: [{ name: "GoKoncentrate" }],
 };

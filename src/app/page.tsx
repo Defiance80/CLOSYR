@@ -38,7 +38,7 @@ export default function HomePage() {
             CLOSYR™
           </h1>
           <p className="text-xl text-muted-foreground mb-8">
-            Where deals don&apos;t just close — they converge.
+            Smarter closings. Safer titles. Seamless escrow.
           </p>
           
           <motion.div

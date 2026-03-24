@@ -69,7 +69,7 @@ export default function LoginPage() {
               Welcome to CLOSYR™
             </h1>
             <p className="text-muted-foreground text-base sm:text-lg">
-              Where deals don&apos;t just close — they converge.
+              Smarter closings. Safer titles. Seamless escrow.
             </p>
           </motion.div>
         </div>

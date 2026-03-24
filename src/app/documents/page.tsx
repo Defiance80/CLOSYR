@@ -20,7 +20,15 @@ import {
   Shield,
   Zap,
   Users,
-  Tag
+  Tag,
+  Camera,
+  Scan,
+  PenTool,
+  Copy,
+  History,
+  Layers,
+  Brain,
+  ScanLine
 } from 'lucide-react';
 
 // Mock document data
@@ -118,7 +126,29 @@ const statusConfig = {
   pending_review: { color: 'text-yellow-500', bg: 'bg-yellow-500/10', icon: Clock },
   submitted: { color: 'text-closyr-blue', bg: 'bg-closyr-blue/10', icon: Send },
   missing: { color: 'text-red-500', bg: 'bg-red-500/10', icon: AlertTriangle },
-  flagged: { color: 'text-orange-500', bg: 'bg-orange-500/10', icon: Shield }
+  flagged: { color: 'text-orange-500', bg: 'bg-orange-500/10', icon: Shield },
+  scanning: { color: 'text-blue-400', bg: 'bg-blue-400/10', icon: ScanLine },
+  processing: { color: 'text-purple-400', bg: 'bg-purple-400/10', icon: Brain }
+};
+
+const documentVersions = {
+  'DOC001': [
+    { version: '1.3', date: '2024-03-25T10:30:00Z', changes: 'Final signatures added', author: 'Lisa Rodriguez' },
+    { version: '1.2', date: '2024-03-22T14:15:00Z', changes: 'Contingency dates updated', author: 'Sarah Johnson' },
+    { version: '1.1', date: '2024-03-20T09:00:00Z', changes: 'Price adjustment', author: 'Mike Chen' },
+    { version: '1.0', date: '2024-03-18T16:45:00Z', changes: 'Initial draft', author: 'David Kim' }
+  ]
+};
+
+const digitalSignatures = {
+  'DOC001': [
+    { signer: 'Sarah Johnson (Buyer)', status: 'signed', timestamp: '2024-03-20T10:30:00Z', ipAddress: '192.168.1.100' },
+    { signer: 'Mike Chen (Seller)', status: 'signed', timestamp: '2024-03-20T11:15:00Z', ipAddress: '192.168.1.101' },
+    { signer: 'Lisa Rodriguez (Agent)', status: 'pending', timestamp: null, ipAddress: null }
+  ],
+  'DOC002': [
+    { signer: 'Title Company', status: 'signed', timestamp: '2024-03-22T14:15:00Z', ipAddress: '10.0.0.50' }
+  ]
 };
 
 function formatDate(dateString: string | null) {
@@ -135,7 +165,37 @@ export default function DocumentsPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [dragActive, setDragActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showScanner, setShowScanner] = useState(false);
+  const [isScanning, setIsScanning] = useState(false);
+  const [ocrProcessing, setOcrProcessing] = useState(false);
+  const [batchMode, setBatchMode] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState<any>(null);
+  const [showVersionHistory, setShowVersionHistory] = useState(false);
+  const [showSignatureStatus, setShowSignatureStatus] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   
+  // Simulation functions
+  const simulateScanning = () => {
+    setIsScanning(true);
+    setTimeout(() => {
+      setIsScanning(false);
+      setOcrProcessing(true);
+      setTimeout(() => {
+        setOcrProcessing(false);
+        setShowScanner(false);
+        // Simulate auto-classification
+        alert('Document scanned and classified as "Deed" with 95% confidence');
+      }, 2000);
+    }, 3000);
+  };
+
+  const handleBatchScan = () => {
+    setBatchMode(!batchMode);
+    if (!batchMode) {
+      alert('Batch scan mode enabled. All scanned documents will be queued for processing.');
+    }
+  };
+
   const filteredDocuments = documents.filter(doc => {
     const matchesCategory = selectedCategory === 'All' || doc.category === selectedCategory;
     const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -157,6 +217,18 @@ export default function DocumentsPage() {
             <p className="text-muted-foreground">AI-powered document management and analysis</p>
           </div>
           <div className="flex gap-3">
+            <Button variant="outline" className="gap-2" onClick={() => setShowScanner(true)}>
+              <Camera className="h-4 w-4" />
+              Scan Document
+            </Button>
+            <Button 
+              variant={batchMode ? "default" : "outline"} 
+              className="gap-2" 
+              onClick={handleBatchScan}
+            >
+              <Layers className="h-4 w-4" />
+              Batch Mode
+            </Button>
             <Button variant="outline" className="gap-2">
               <Filter className="h-4 w-4" />
               Filter
@@ -256,6 +328,208 @@ export default function DocumentsPage() {
               </div>
             </CardContent>
           </Card>
+        )}
+
+        {/* Scanner Interface */}
+        {showScanner && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+            onClick={() => setShowScanner(false)}
+          >
+            <motion.div
+              initial={{ y: 20 }}
+              animate={{ y: 0 }}
+              className="bg-background border border-border rounded-lg p-6 max-w-md w-full mx-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="text-center space-y-6">
+                <div className="w-16 h-16 mx-auto bg-closyr-blue/20 rounded-full flex items-center justify-center">
+                  {isScanning ? (
+                    <ScanLine className="h-8 w-8 text-closyr-blue animate-pulse" />
+                  ) : ocrProcessing ? (
+                    <Brain className="h-8 w-8 text-purple-400 animate-pulse" />
+                  ) : (
+                    <Camera className="h-8 w-8 text-closyr-blue" />
+                  )}
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">
+                    {isScanning ? 'Scanning Document...' : 
+                     ocrProcessing ? 'AI Reading Document...' : 
+                     'Document Scanner'}
+                  </h3>
+                  <p className="text-muted-foreground">
+                    {isScanning ? 'Please keep document steady' : 
+                     ocrProcessing ? 'Extracting text and classifying document type' : 
+                     'Position document within the camera view'}
+                  </p>
+                </div>
+
+                {ocrProcessing && (
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>OCR Progress</span>
+                      <span>78%</span>
+                    </div>
+                    <div className="w-full bg-muted/30 rounded-full h-2">
+                      <div className="bg-purple-400 h-2 rounded-full w-3/4 smooth-transition"></div>
+                    </div>
+                  </div>
+                )}
+
+                {batchMode && !isScanning && !ocrProcessing && (
+                  <div className="p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
+                    <p className="text-sm text-blue-400">Batch mode enabled - documents will be queued</p>
+                  </div>
+                )}
+
+                <div className="flex gap-3">
+                  {!isScanning && !ocrProcessing && (
+                    <>
+                      <Button variant="outline" className="flex-1" onClick={() => setShowScanner(false)}>
+                        Cancel
+                      </Button>
+                      <Button variant="default" className="flex-1 gap-2" onClick={simulateScanning}>
+                        <Scan className="h-4 w-4" />
+                        Start Scan
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {/* Document Preview Modal */}
+        {showPreview && selectedDocument && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+            onClick={() => setShowPreview(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              className="bg-background border border-border rounded-lg p-6 max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">{selectedDocument.name}</h3>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={() => setShowVersionHistory(true)}>
+                    <History className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => setShowSignatureStatus(true)}>
+                    <PenTool className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => setShowPreview(false)}>
+                    ✕
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Mock document preview */}
+              <div className="aspect-[8.5/11] bg-white rounded border border-gray-300 flex items-center justify-center">
+                <p className="text-gray-500">Document Preview - {selectedDocument.name}</p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {/* Version History Modal */}
+        {showVersionHistory && selectedDocument && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+            onClick={() => setShowVersionHistory(false)}
+          >
+            <motion.div
+              initial={{ y: 20 }}
+              animate={{ y: 0 }}
+              className="bg-background border border-border rounded-lg p-6 max-w-md w-full mx-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">Version History</h3>
+                <Button variant="ghost" size="sm" onClick={() => setShowVersionHistory(false)}>
+                  ✕
+                </Button>
+              </div>
+              
+              <div className="space-y-3">
+                {(documentVersions[selectedDocument.id] || []).map((version, index) => (
+                  <div key={version.version} className="p-3 rounded-lg border border-border/50">
+                    <div className="flex justify-between items-start mb-1">
+                      <span className="font-medium">v{version.version}</span>
+                      {index === 0 && (
+                        <span className="px-2 py-1 text-xs bg-green-500/20 text-green-400 rounded-full">
+                          Current
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-1">{version.changes}</p>
+                    <div className="flex justify-between items-center text-xs text-muted-foreground">
+                      <span>{version.author}</span>
+                      <span>{formatDate(version.date)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {/* Digital Signature Status Modal */}
+        {showSignatureStatus && selectedDocument && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+            onClick={() => setShowSignatureStatus(false)}
+          >
+            <motion.div
+              initial={{ y: 20 }}
+              animate={{ y: 0 }}
+              className="bg-background border border-border rounded-lg p-6 max-w-md w-full mx-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">Digital Signatures</h3>
+                <Button variant="ghost" size="sm" onClick={() => setShowSignatureStatus(false)}>
+                  ✕
+                </Button>
+              </div>
+              
+              <div className="space-y-3">
+                {(digitalSignatures[selectedDocument.id] || []).map((signature, index) => (
+                  <div key={index} className="p-3 rounded-lg border border-border/50">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-medium">{signature.signer}</span>
+                      <span className={`px-2 py-1 text-xs rounded-full ${
+                        signature.status === 'signed' 
+                          ? 'bg-green-500/20 text-green-400'
+                          : 'bg-yellow-500/20 text-yellow-400'
+                      }`}>
+                        {signature.status.toUpperCase()}
+                      </span>
+                    </div>
+                    {signature.timestamp && (
+                      <div className="text-xs text-muted-foreground">
+                        <p>Signed: {formatDate(signature.timestamp)}</p>
+                        <p>IP: {signature.ipAddress}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
         )}
 
         {/* Upload Zone */}
@@ -394,11 +668,41 @@ export default function DocumentsPage() {
                       </div>
                       
                       <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="sm">
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedDocument(doc);
+                            setShowPreview(true);
+                          }}
+                        >
                           <Eye className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="sm">
                           <Download className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedDocument(doc);
+                            setShowVersionHistory(true);
+                          }}
+                        >
+                          <History className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedDocument(doc);
+                            setShowSignatureStatus(true);
+                          }}
+                        >
+                          <PenTool className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm">
+                          <Copy className="h-4 w-4" />
                         </Button>
                         {(doc.status === 'pending_review' || doc.status === 'flagged') && (
                           <Button variant="ghost" size="sm">
