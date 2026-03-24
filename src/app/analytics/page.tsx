@@ -1,10 +1,12 @@
 "use client";
 
+import { usePathname } from 'next/navigation';
 import { MainLayout } from '@/components/layout/main-layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function PlaceholderPage() {
-  const pageName = location.pathname.split('/').pop() || 'page';
+  const pathname = usePathname();
+  const pageName = pathname.split('/').pop() || 'page';
   const capitalizedName = pageName.charAt(0).toUpperCase() + pageName.slice(1);
 
   return (

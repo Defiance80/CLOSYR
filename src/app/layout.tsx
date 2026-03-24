@@ -1,13 +1,17 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0B0F14",
+};
 
 export const metadata: Metadata = {
   title: "CLOSYR™ - Deal Intelligence & Escrow Operating System",
   description: "Where deals don't just close — they converge. Modern escrow and deal intelligence platform.",
   keywords: "escrow, real estate, deal intelligence, transaction management, fintech",
   authors: [{ name: "GoKoncentrate" }],
-  viewport: "width=device-width, initial-scale=1",
-  themeColor: "#0B0F14",
 };
 
 export default function RootLayout({
