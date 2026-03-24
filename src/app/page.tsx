@@ -38,7 +38,7 @@ export default function HomePage() {
             CLOSYR™
           </h1>
           <p className="text-xl text-muted-foreground mb-8">
-            Where deals don't just close — they converge.
+            Where deals don&apos;t just close — they converge.
           </p>
           
           <motion.div

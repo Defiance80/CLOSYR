@@ -57,7 +57,7 @@ export default function LoginPage() {
               Welcome to CLOSYR™
             </h1>
             <p className="text-muted-foreground text-lg">
-              Where deals don't just close — they converge.
+              Where deals don&apos;t just close — they converge.
             </p>
           </motion.div>
         </div>
