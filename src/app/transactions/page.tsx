@@ -102,27 +102,41 @@ function getStatusBg(status: string) {
 
 export default function TransactionsPage() {
   const [selectedTransaction, setSelectedTransaction] = useState(transactions[0]);
+  const [showMobileList, setShowMobileList] = useState(true);
 
   return (
     <MainLayout>
-      <div className="h-full flex">
+      <div className="h-full flex flex-col lg:flex-row">
+        {/* Mobile Header - Hidden on desktop */}
+        <div className="lg:hidden p-3 sm:p-4 border-b border-border bg-background/95">
+          <h1 className="text-xl sm:text-2xl font-bold mb-2">Transactions</h1>
+          <div className="flex items-center gap-2 sm:gap-3 text-sm text-muted-foreground">
+            <span>{transactions.length} Active Deals</span>
+            <span>•</span>
+            <span>Health Score: {selectedTransaction.healthScore}</span>
+          </div>
+        </div>
+
         {/* Left Panel - Deal Summary */}
-        <div className="w-80 border-r border-border bg-background/95 glassmorphic-dark p-4 overflow-y-auto">
-          <div className="space-y-4">
-            <div>
-              <h2 className="text-xl font-bold mb-4">Active Transactions</h2>
+        <div className={`${showMobileList ? 'block' : 'hidden lg:block'} w-full lg:w-80 border-r border-border bg-background/95 glassmorphic-dark p-3 sm:p-4 overflow-y-auto`}>
+          <div className="space-y-3 sm:space-y-4">
+            <div className="hidden lg:block">
+              <h2 className="text-lg sm:text-xl font-bold mb-4">Active Transactions</h2>
             </div>
             
             {transactions.map((tx) => (
               <motion.div
                 key={tx.id}
                 whileHover={{ scale: 1.02 }}
-                className={`p-4 rounded-lg border cursor-pointer smooth-transition ${
+                className={`p-3 sm:p-4 rounded-lg border cursor-pointer smooth-transition min-h-[44px] ${
                   selectedTransaction.id === tx.id
                     ? 'border-closyr-blue bg-closyr-blue/10'
                     : 'border-border hover:border-closyr-blue/50 hover:bg-accent/20'
                 }`}
-                onClick={() => setSelectedTransaction(tx)}
+                onClick={() => {
+                  setSelectedTransaction(tx);
+                  setShowMobileList(false);
+                }}
               >
                 <div className="flex justify-between items-start mb-2">
                   <span className="text-sm font-medium text-closyr-blue">{tx.id}</span>
@@ -165,28 +179,40 @@ export default function TransactionsPage() {
         </div>
 
         {/* Center Panel - Timeline & Activity */}
-        <div className="flex-1 p-6 overflow-y-auto">
-          <div className="max-w-4xl mx-auto space-y-6">
+        <div className={`${showMobileList ? 'hidden lg:block' : 'block'} flex-1 p-3 sm:p-6 overflow-y-auto`}>
+          <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
+            {/* Mobile Back Button */}
+            <div className="lg:hidden">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setShowMobileList(true)}
+                className="mb-4"
+              >
+                ← Back to Deals
+              </Button>
+            </div>
+
             {/* Transaction Header */}
             <div>
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h1 className="text-2xl font-bold mb-1">{selectedTransaction.address}</h1>
-                  <p className="text-lg text-closyr-gold font-semibold">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-xl sm:text-2xl font-bold mb-1 truncate">{selectedTransaction.address}</h1>
+                  <p className="text-lg sm:text-xl text-closyr-gold font-semibold">
                     ${selectedTransaction.price.toLocaleString()}
                   </p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="text-right">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                  <div className="text-left sm:text-right">
                     <p className="text-sm text-muted-foreground">Deal Health</p>
-                    <p className={`text-2xl font-bold ${
+                    <p className={`text-xl sm:text-2xl font-bold ${
                       selectedTransaction.healthScore >= 80 ? 'text-closyr-green' :
                       selectedTransaction.healthScore >= 60 ? 'text-yellow-500' : 'text-red-500'
                     }`}>
                       {selectedTransaction.healthScore}
                     </p>
                   </div>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" className="w-full sm:w-auto min-h-[44px]">
                     <Eye className="h-4 w-4 mr-2" />
                     View Details
                   </Button>
@@ -212,14 +238,14 @@ export default function TransactionsPage() {
             <Card className="glassmorphic">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5" />
+                  <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
                   Transaction Timeline
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   {timeline.map((event, index) => (
-                    <div key={index} className="flex gap-4">
+                    <div key={index} className="flex gap-3 sm:gap-4">
                       <div className="flex flex-col items-center">
                         <div className={`w-4 h-4 rounded-full border-2 ${
                           event.status === 'completed' ? 'bg-closyr-green border-closyr-green' :
@@ -227,19 +253,19 @@ export default function TransactionsPage() {
                           'bg-background border-muted-foreground'
                         }`} />
                         {index < timeline.length - 1 && (
-                          <div className={`w-0.5 h-12 mt-2 ${
+                          <div className={`w-0.5 h-8 sm:h-12 mt-2 ${
                             event.status === 'completed' ? 'bg-closyr-green' : 'bg-muted'
                           }`} />
                         )}
                       </div>
                       
-                      <div className="flex-1 pb-6">
-                        <div className="flex items-center justify-between mb-1">
-                          <h4 className="font-medium">{event.title}</h4>
-                          <span className="text-sm text-muted-foreground">{event.date}</span>
+                      <div className="flex-1 pb-4 sm:pb-6 min-w-0">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1 gap-1 sm:gap-0">
+                          <h4 className="font-medium text-sm sm:text-base">{event.title}</h4>
+                          <span className="text-xs sm:text-sm text-muted-foreground">{event.date}</span>
                         </div>
-                        <p className="text-sm text-muted-foreground">{event.details}</p>
-                        <div className={`inline-flex px-2 py-1 rounded text-xs mt-2 ${getStatusBg(event.status)} ${getStatusColor(event.status)}`}>
+                        <p className="text-xs sm:text-sm text-muted-foreground mb-2">{event.details}</p>
+                        <div className={`inline-flex px-2 py-1 rounded text-xs ${getStatusBg(event.status)} ${getStatusColor(event.status)}`}>
                           {event.status.replace('_', ' ').toUpperCase()}
                         </div>
                       </div>
@@ -253,26 +279,26 @@ export default function TransactionsPage() {
             <Card className="glassmorphic">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <MessageSquare className="h-5 w-5" />
+                  <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5" />
                   Recent Communications
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="p-4 rounded-lg bg-closyr-blue/10">
-                    <div className="flex justify-between mb-2">
-                      <span className="font-medium">Title Company Update</span>
-                      <span className="text-sm text-muted-foreground">2 hours ago</span>
+                <div className="space-y-3 sm:space-y-4">
+                  <div className="p-3 sm:p-4 rounded-lg bg-closyr-blue/10">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2 mb-2">
+                      <span className="font-medium text-sm sm:text-base">Title Company Update</span>
+                      <span className="text-xs sm:text-sm text-muted-foreground">2 hours ago</span>
                     </div>
-                    <p className="text-sm text-muted-foreground">Title search complete. One minor lien found and being resolved.</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground">Title search complete. One minor lien found and being resolved.</p>
                   </div>
                   
-                  <div className="p-4 rounded-lg bg-closyr-green/10">
-                    <div className="flex justify-between mb-2">
-                      <span className="font-medium">Lender Approval</span>
-                      <span className="text-sm text-muted-foreground">1 day ago</span>
+                  <div className="p-3 sm:p-4 rounded-lg bg-closyr-green/10">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2 mb-2">
+                      <span className="font-medium text-sm sm:text-base">Lender Approval</span>
+                      <span className="text-xs sm:text-sm text-muted-foreground">1 day ago</span>
                     </div>
-                    <p className="text-sm text-muted-foreground">Final loan approval received. Clear to close conditions met.</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground">Final loan approval received. Clear to close conditions met.</p>
                   </div>
                 </div>
               </CardContent>
@@ -281,50 +307,50 @@ export default function TransactionsPage() {
         </div>
 
         {/* Right Panel - Actions & Insights */}
-        <div className="w-80 border-l border-border bg-background/95 glassmorphic-dark p-4 overflow-y-auto">
-          <div className="space-y-6">
-            {/* Parties */}
+        <div className={`${showMobileList ? 'hidden lg:block' : 'block lg:block'} w-full lg:w-80 lg:border-l border-border bg-background/95 glassmorphic-dark p-3 sm:p-4 overflow-y-auto`}>
+          <div className="space-y-4 sm:space-y-6">
+            {/* Parties - Mobile: Horizontal scroll, Desktop: Stacked */}
             <Card className="glassmorphic">
               <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
+                <CardTitle className="text-base sm:text-lg flex items-center gap-2">
                   <Users className="h-4 w-4" />
                   Parties
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
                   <div className="p-3 rounded-lg bg-accent/30">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-sm font-medium">Buyer</span>
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0 min-h-[24px] min-w-[24px]">
                         <ExternalLink className="h-3 w-3" />
                       </Button>
                     </div>
-                    <p className="text-sm">{selectedTransaction.parties.buyer.name}</p>
-                    <p className="text-xs text-muted-foreground">{selectedTransaction.parties.buyer.email}</p>
+                    <p className="text-sm truncate">{selectedTransaction.parties.buyer.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{selectedTransaction.parties.buyer.email}</p>
                   </div>
                   
                   <div className="p-3 rounded-lg bg-accent/30">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-sm font-medium">Seller</span>
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0 min-h-[24px] min-w-[24px]">
                         <ExternalLink className="h-3 w-3" />
                       </Button>
                     </div>
-                    <p className="text-sm">{selectedTransaction.parties.seller.name}</p>
-                    <p className="text-xs text-muted-foreground">{selectedTransaction.parties.seller.email}</p>
+                    <p className="text-sm truncate">{selectedTransaction.parties.seller.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{selectedTransaction.parties.seller.email}</p>
                   </div>
                   
                   <div className="p-3 rounded-lg bg-accent/30">
                     <span className="text-sm font-medium">Lender</span>
-                    <p className="text-sm">{selectedTransaction.parties.lender.name}</p>
-                    <p className="text-xs text-muted-foreground">Contact: {selectedTransaction.parties.lender.contact}</p>
+                    <p className="text-sm truncate">{selectedTransaction.parties.lender.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">Contact: {selectedTransaction.parties.lender.contact}</p>
                   </div>
                   
                   <div className="p-3 rounded-lg bg-accent/30">
                     <span className="text-sm font-medium">Agent</span>
-                    <p className="text-sm">{selectedTransaction.parties.agent.name}</p>
-                    <p className="text-xs text-muted-foreground">{selectedTransaction.parties.agent.phone}</p>
+                    <p className="text-sm truncate">{selectedTransaction.parties.agent.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{selectedTransaction.parties.agent.phone}</p>
                   </div>
                 </div>
               </CardContent>
@@ -333,25 +359,25 @@ export default function TransactionsPage() {
             {/* Quick Actions */}
             <Card className="glassmorphic">
               <CardHeader>
-                <CardTitle className="text-lg">Quick Actions</CardTitle>
+                <CardTitle className="text-base sm:text-lg">Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button variant="default" className="w-full justify-start gap-2">
+                <Button variant="default" className="w-full justify-start gap-2 min-h-[44px]">
                   <FileText className="h-4 w-4" />
                   Upload Document
                 </Button>
                 
-                <Button variant="outline" className="w-full justify-start gap-2">
+                <Button variant="outline" className="w-full justify-start gap-2 min-h-[44px]">
                   <MessageSquare className="h-4 w-4" />
                   Send Update
                 </Button>
                 
-                <Button variant="outline" className="w-full justify-start gap-2">
+                <Button variant="outline" className="w-full justify-start gap-2 min-h-[44px]">
                   <Calendar className="h-4 w-4" />
                   Schedule Meeting
                 </Button>
                 
-                <Button variant="gold" className="w-full justify-start gap-2">
+                <Button variant="gold" className="w-full justify-start gap-2 min-h-[44px]">
                   <DollarSign className="h-4 w-4" />
                   Request Funds
                 </Button>
@@ -361,7 +387,7 @@ export default function TransactionsPage() {
             {/* WatchDog Alerts */}
             <Card className="glassmorphic border-red-500/20">
               <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2 text-red-500">
+                <CardTitle className="text-base sm:text-lg flex items-center gap-2 text-red-500">
                   <Shield className="h-4 w-4" />
                   WatchDog Alerts
                 </CardTitle>
@@ -372,10 +398,10 @@ export default function TransactionsPage() {
                     <AlertTriangle className="h-4 w-4 text-red-500" />
                     <span className="text-sm font-medium text-red-500">High Risk</span>
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground mb-2">
                     Wire instructions changed within 48h of closing - requires verification
                   </p>
-                  <Button size="sm" variant="outline" className="mt-2">
+                  <Button size="sm" variant="outline" className="w-full sm:w-auto min-h-[44px]">
                     Investigate
                   </Button>
                 </div>
@@ -385,10 +411,10 @@ export default function TransactionsPage() {
                     <Clock className="h-4 w-4 text-yellow-500" />
                     <span className="text-sm font-medium text-yellow-500">Attention</span>
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground mb-2">
                     Document deadline approaching - 2 days remaining
                   </p>
-                  <Button size="sm" variant="outline" className="mt-2">
+                  <Button size="sm" variant="outline" className="w-full sm:w-auto min-h-[44px]">
                     Follow Up
                   </Button>
                 </div>
@@ -398,7 +424,7 @@ export default function TransactionsPage() {
             {/* Insights */}
             <Card className="glassmorphic">
               <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
+                <CardTitle className="text-base sm:text-lg flex items-center gap-2">
                   <TrendingUp className="h-4 w-4" />
                   AI Insights
                 </CardTitle>
