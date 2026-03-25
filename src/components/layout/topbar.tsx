@@ -37,7 +37,7 @@ export function TopBar({ onMenuToggle, mobileMenuOpen = false, isMobile = false 
   };
 
   return (
-    <div className="h-14 sm:h-16 bg-background/95 border-b border-border glassmorphic-dark px-3 sm:px-6 flex items-center justify-between">
+    <div className="h-14 sm:h-16 bg-background/95 border-b border-border glassmorphic-dark px-3 sm:px-6 flex items-center justify-between relative z-50">
       {/* Left Side - Menu & Search */}
       <div className="flex items-center gap-2 sm:gap-4 flex-1">
         {/* Menu Button */}
@@ -105,8 +105,8 @@ export function TopBar({ onMenuToggle, mobileMenuOpen = false, isMobile = false 
             className="flex items-center gap-2 sm:gap-3 hover:bg-white/5 rounded-lg px-2 py-1.5 smooth-transition"
           >
             <div className="hidden sm:block text-right">
-              <p className="text-sm font-medium">Demo User</p>
-              <p className="text-xs text-muted-foreground">Transaction Manager</p>
+              <p className="text-sm font-medium">Robert Austin</p>
+              <p className="text-xs text-muted-foreground">Super Admin</p>
             </div>
             
             <div className="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-to-br from-closyr-blue to-closyr-gold rounded-full flex items-center justify-center shrink-0">
@@ -122,13 +122,18 @@ export function TopBar({ onMenuToggle, mobileMenuOpen = false, isMobile = false 
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
                 transition={{ duration: 0.15 }}
-                className="absolute right-0 top-full mt-2 w-56 bg-background/95 border border-border rounded-lg shadow-xl glassmorphic-dark z-50 overflow-hidden"
+                className="absolute right-0 top-full mt-2 w-56 bg-background/95 border border-border rounded-lg shadow-xl glassmorphic-dark z-[60] overflow-hidden"
               >
                 {/* User Info */}
                 <div className="px-4 py-3 border-b border-border">
-                  <p className="text-sm font-medium">Demo User</p>
-                  <p className="text-xs text-muted-foreground">demo@closyr.ai</p>
-                  <p className="text-xs text-closyr-gold mt-1">Transaction Manager</p>
+                  <p className="text-sm font-medium">Robert Austin</p>
+                  <p className="text-xs text-muted-foreground">robert.austin@closyr.ai</p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className="px-2 py-1 text-xs font-medium bg-red-500/20 text-red-300 rounded-md border border-red-500/30">
+                      Super Admin
+                    </span>
+                    <span className="text-xs text-muted-foreground">All Offices</span>
+                  </div>
                 </div>
 
                 {/* Menu Items */}

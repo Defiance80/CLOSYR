@@ -9,7 +9,6 @@ import {
   BarChart3, 
   FileText, 
   MessageSquare, 
-  DollarSign, 
   Zap, 
   PieChart, 
   Users, 
@@ -19,13 +18,15 @@ import {
   Shield,
   FileCheck,
   Calculator,
-  Receipt
+  Receipt,
+  Landmark
 } from 'lucide-react';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Transactions', href: '/transactions', icon: ArrowLeftRight },
   { name: 'Documents', href: '/documents', icon: FileText },
+  { name: 'Accounts', href: '/accounts', icon: Landmark },
   { name: 'Templates', href: '/templates', icon: FileCheck },
   { name: 'Communications', href: '/communications', icon: MessageSquare },
   { name: 'Accounting', href: '/funds', icon: Calculator },
