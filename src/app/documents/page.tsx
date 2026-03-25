@@ -169,7 +169,7 @@ export default function DocumentsPage() {
   const [isScanning, setIsScanning] = useState(false);
   const [ocrProcessing, setOcrProcessing] = useState(false);
   const [batchMode, setBatchMode] = useState(false);
-  const [selectedDocument, setSelectedDocument] = useState<{ id: string; name: string; [key: string]: string } | null>(null);
+  const [selectedDocument, setSelectedDocument] = useState<typeof documents[number] | null>(null);
   const [showVersionHistory, setShowVersionHistory] = useState(false);
   const [showSignatureStatus, setShowSignatureStatus] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
