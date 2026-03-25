@@ -169,7 +169,8 @@ export default function DocumentsPage() {
   const [isScanning, setIsScanning] = useState(false);
   const [ocrProcessing, setOcrProcessing] = useState(false);
   const [batchMode, setBatchMode] = useState(false);
-  const [selectedDocument, setSelectedDocument] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [selectedDocument, setSelectedDocument] = useState<Record<string, unknown> | null>(null);
   const [showVersionHistory, setShowVersionHistory] = useState(false);
   const [showSignatureStatus, setShowSignatureStatus] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
