@@ -463,7 +463,7 @@ export default function DocumentsPage() {
               </div>
               
               <div className="space-y-3">
-                {(documentVersions[selectedDocument.id] || []).map((version, index) => (
+                {(documentVersions[selectedDocument.id as keyof typeof documentVersions] || []).map((version, index) => (
                   <div key={version.version} className="p-3 rounded-lg border border-border/50">
                     <div className="flex justify-between items-start mb-1">
                       <span className="font-medium">v{version.version}</span>
@@ -507,7 +507,7 @@ export default function DocumentsPage() {
               </div>
               
               <div className="space-y-3">
-                {(digitalSignatures[selectedDocument.id] || []).map((signature, index) => (
+                {(digitalSignatures[selectedDocument.id as keyof typeof digitalSignatures] || []).map((signature, index) => (
                   <div key={index} className="p-3 rounded-lg border border-border/50">
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-medium">{signature.signer}</span>
