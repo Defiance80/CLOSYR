@@ -420,7 +420,7 @@ export default function AutomationPage() {
                       outerRadius={60}
                       fill="#8884d8"
                       dataKey="count"
-                      label={({ name, percent }: { name: string; percent: number }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }: { name?: string; percent?: number }) => `${name || ''}: ${((percent || 0) * 100).toFixed(0)}%`}
                       labelLine={false}
                       fontSize={12}
                     >
