@@ -197,10 +197,10 @@ export function AIChatbot() {
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className={cn(
               "fixed z-40",
-              "sm:bottom-6 sm:right-6 sm:w-[400px] sm:h-[600px]",
-              "bottom-0 right-0 left-0 h-full sm:h-auto w-full sm:w-auto",
-              "bg-background/95 backdrop-blur-xl border border-border/50 rounded-lg sm:rounded-2xl",
-              "shadow-2xl shadow-black/20 glassmorphic-dark",
+              "sm:bottom-24 sm:right-6 sm:w-[380px] sm:max-h-[520px]",
+              "bottom-0 right-0 left-0 h-[85vh] sm:h-[520px] w-full sm:w-auto sm:left-auto",
+              "bg-background/95 backdrop-blur-xl border border-border/50 rounded-t-2xl sm:rounded-2xl",
+              "shadow-2xl shadow-black/20 glassmorphic-dark flex flex-col",
               isMinimized ? "h-16" : ""
             )}
           >
